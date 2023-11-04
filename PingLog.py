@@ -1,8 +1,10 @@
+# Import necessary libraries
 import ping3
 import datetime
 import time
 import os
 
+# Function to ping an IP address and return the round-trip time
 def ping(ip):
     try:
         # Execute the ping and get the round-trip time
@@ -14,20 +16,19 @@ def ping(ip):
     except Exception as e:
         return False, None
 
+# Function to save the ping result to a log file
 def save_log(log_file, ip, result):
     with open(log_file, 'a') as file:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-        file.write(f'{timestamp}')
-        file.write(f' IP: {ip}')
+        file.write(f'{timestamp}')  # Write the current timestamp
+        file.write(f' IP: {ip}')  # Write the IP address
         if result[0]:
-            file.write(f' Result: Success')
-            file.write(f' RTT: {result[1]} ms')
-
-
+            file.write(f' Result: Success')  # Write the success message
+            file.write(f' RTT: {result[1]} ms')  # Write the round-trip time
         else:
-            file.write(f' Result: Error')
-            file.write(f' Details: {result[1]}')
+            file.write(f' Result: Error')  # Write the error message
+            file.write(f' Details: {result[1]}')  # Write the error details
         file.write(f'\n')
 
 # IP address to ping
@@ -40,10 +41,10 @@ log_file = os.path.join(os.path.expanduser("~"), "Desktop", "ping_log.txt")
 def Ping_f(ip,log_file):
     while True:
         try:
-            result = ping(ip)
-            save_log(log_file, ip, result)
-            print("Ping done and logged.")
-            time.sleep(1)
+            result = ping(ip)  # Ping the IP address
+            save_log(log_file, ip, result)  # Save the result to the log file
+            print("Ping done and logged.")  # Print a success message
+            time.sleep(1)  # Wait for 1 second
         except KeyboardInterrupt:
-            print("Program stopped by user.")
+            print("Program stopped by user.")  # Print a message when the program is stopped
             break
