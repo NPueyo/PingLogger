@@ -6,6 +6,15 @@ import os
 
 # Function to ping an IP address and return the round-trip time
 def ping(ip):
+    """
+    Function to ping an IP address and return the round-trip time.
+
+    Args:
+        ip (str): The IP address to ping.
+
+    Returns:
+        tuple: A tuple containing a boolean indicating whether the ping was successful and the round-trip time.
+    """
     try:
         # Execute the ping and get the round-trip time
         rtt = ping3.ping(ip)
@@ -18,6 +27,14 @@ def ping(ip):
 
 # Function to save the ping result to a log file
 def save_log(log_file, ip, result):
+    """
+    Function to save the ping result to a log file.
+
+    Args:
+        log_file (str): The path to the log file.
+        ip (str): The IP address that was pinged.
+        result (tuple): The result of the ping.
+    """
     with open(log_file, 'a') as file:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -39,6 +56,12 @@ log_file = os.path.join(os.path.expanduser("~"), "Desktop", "ping_log.txt")
 
 # Continuous loop with 1-second interval
 def Ping_f(ip,log_file):
+    """
+    Function to continuously ping an IP address and log the results.
+    Args:
+        ip (str): The IP address to ping.
+        log_file (str): The path to the log file.
+    """
     while True:
         try:
             result = ping(ip)  # Ping the IP address
