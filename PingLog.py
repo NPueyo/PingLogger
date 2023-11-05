@@ -1,20 +1,3 @@
-# Import necessary libraries
-import ping3
-import datetime
-import time
-import os
-
-
-
-# IP address to ping
-ip = "192.168.1.1"
-
-# Log file path on Windows desktop
-log_file = os.path.join(os.path.expanduser("~"), "Desktop", "ping_log.txt")
-
-
-
-
 import ping3
 import datetime
 import time
@@ -74,7 +57,6 @@ def parse_args():
     parser.add_argument("--ip", default="192.168.1.1", help="IP address to ping")
     parser.add_argument("--log_file", default="ping_log.log", help="Path to the log file")
     return parser.parse_args()
-
 
 
 def main():
