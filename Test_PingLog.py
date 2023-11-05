@@ -1,6 +1,6 @@
 import pytest
-from PingLog import ping, save_log
-import os
+from PingLog import *
+
 import datetime
 
 def test_ping():
@@ -30,3 +30,6 @@ def test_save_log(tmpdir):
         assert f' IP: {ip}' in lines[0]  # The log should contain the IP address
         assert ' Result: Success' in lines[0]  # The log should contain the result
         assert f' RTT: {result[1]} ms' in lines[0]  # The log should contain the round-trip time
+
+if __name__ == "__main__":
+    pytest.main()
