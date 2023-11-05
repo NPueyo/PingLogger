@@ -4,28 +4,46 @@ import datetime
 import time
 import os
 
+
+
+# IP address to ping
+ip = "192.168.1.1"
+
+# Log file path on Windows desktop
+log_file = os.path.join(os.path.expanduser("~"), "Desktop", "ping_log.txt")
+
+
+
+
+import ping3
+import datetime
+import time
+import os
+import argparse
+
+
 # Function to ping an IP address and return the round-trip time
 def ping(ip):
     """
     Function to ping an IP address and return the round-trip time.
-
     Args:
         ip (str): The IP address to ping.
-
     Returns:
-        tuple: A tuple containing a boolean indicating whether the ping was successful and the round-trip time.
+        tuple: A tuple containing a boolean indicating whether the ping was successful and the round-trip time or error message.
     """
     try:
-        # Execute the ping and get the round-trip time
+
         rtt = ping3.ping(ip)
         if rtt is not None:
             return True, rtt
         else:
-            return False, None
+            return False, "Ping request timed out."
+    except ping3.NetworkError as e:
+        return False, f"Network error: {e}"
     except Exception as e:
-        return False, None
+        return False, f"Error: {e}"
 
-# Function to save the ping result to a log file
+
 def save_log(log_file, ip, result):
     """
     Function to save the ping result to a log file.
@@ -37,37 +55,44 @@ def save_log(log_file, ip, result):
     """
     with open(log_file, 'a') as file:
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
-        file.write(f'{timestamp}')  # Write the current timestamp
-        file.write(f' IP: {ip}')  # Write the IP address
+        file.write(f'{timestamp} IP: {ip}') # Write the current timestamp and the IP address
         if result[0]:
-            file.write(f' Result: Success')  # Write the success message
-            file.write(f' RTT: {result[1]} ms')  # Write the round-trip time
+            file.write(f' Result: Success RTT: {result[1]} ms') # Write the success message
         else:
-            file.write(f' Result: Error')  # Write the error message
-            file.write(f' Details: {result[1]}')  # Write the error details
+            file.write(f' Result: Error Details: {result[1]}')   # Write the error message
         file.write(f'\n')
 
-# IP address to ping
-ip = "192.168.1.1"
-
-# Log file path on Windows desktop
-log_file = os.path.join(os.path.expanduser("~"), "Desktop", "ping_log.txt")
-
-# Continuous loop with 1-second interval
-def Ping_f(ip,log_file):
+# CLI Parser
+def parse_args():
     """
-    Function to continuously ping an IP address and log the results.
-    Args:
-        ip (str): The IP address to ping.
-        log_file (str): The path to the log file.
+    Parse command-line arguments.
+
+    Returns:
+        argparse.Namespace: An object containing the parsed command-line arguments.
     """
+    parser = argparse.ArgumentParser(description="Continuous ping and log script")
+    parser.add_argument("--ip", default="192.168.1.1", help="IP address to ping")
+    parser.add_argument("--log_file", default="ping_log.log", help="Path to the log file")
+    return parser.parse_args()
+
+
+
+def main():
+    args = parse_args()
+    ip = args.ip
+    log_file = args.log_file
+
     while True:
         try:
             result = ping(ip)  # Ping the IP address
-            save_log(log_file, ip, result)  # Save the result to the log file
-            print("Ping done and logged.")  # Print a success message
-            time.sleep(1)  # Wait for 1 second
+            save_log(log_file, ip, result) # Save the result to the log file
+            print("Ping done and logged.") # Print a success message
+            time.sleep(1) # Wait for 1 second
         except KeyboardInterrupt:
             print("Program stopped by user.")  # Print a message when the program is stopped
             break
+
+
+
+if __name__ == "__main__":
+    main()
